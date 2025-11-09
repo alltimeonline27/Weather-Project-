@@ -11,6 +11,12 @@
 </head>
 
 <body>
+    <script>
+        // If user is NOT logged in, go to login page BEFORE loading the app
+        if (!localStorage.getItem('loggedUser')) {
+            window.location.replace('login.html');
+        }
+    </script>
 
     <!-- Loader Screen -->
     <div id="loader">
@@ -26,6 +32,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
+            <img src="logo.png" alt="weather-app-logo" class="landing-logo"
+                style="width:50px;height:50px;font-weight:700">
             <a class="navbar-brand fw-bold" href="#top">WeatherApp</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
@@ -33,6 +41,11 @@
 
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button id="logout-btn" class="btn btn-light btn-sm ms-2"
+                            style="background-color: aqua; align-self: start;">Logout</button>
+                    </li>
+
                     <li class="nav-item"><a class="nav-link active" href="#home-section">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#guide-section">Guide</a></li>
                     <li class="nav-item"><a class="nav-link" href="#rating-section">Rating</a></li>
@@ -59,7 +72,7 @@
                 </div>
 
                 <button class="search-btn" onclick="fetchWeather()">Search</button>
-                
+
             </div>
 
             <!-- Recent Searches -->
@@ -80,7 +93,7 @@
             <div id="hourly-forecast" class="forecast-container"></div>
 
             <h3 style="color:#fff; margin-top:20px;">5-Day Forecast</h3>
-<div id="weekly-forecast" class="forecast-container"></div>
+            <div id="weekly-forecast" class="forecast-container"></div>
 
         </div>
     </section>

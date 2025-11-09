@@ -53,6 +53,35 @@ body.dark footer {
     color: #fff;
 }
 
+.auth-box {
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 18px;
+    border-radius: 12px;
+    margin: 20px auto;
+    backdrop-filter: blur(8px);
+    text-align: center;
+    color: #fff;
+}
+
+.auth-box input {
+    width: 90%;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+.auth-box button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #0071e3;
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+}
+
+
 /* -------------------- Loader -------------------- */
 #loader {
     position: fixed;
@@ -133,8 +162,9 @@ body.dark footer {
 }
 
 /* AQI + Alerts */
-#aqi-box, #weather-alerts {
-    background: rgba(255,255,255,0.15);
+#aqi-box,
+#weather-alerts {
+    background: rgba(255, 255, 255, 0.15);
     padding: 12px;
     border-radius: 10px;
     margin-top: 10px;
@@ -142,7 +172,8 @@ body.dark footer {
     color: #fff;
 }
 
-#aqi-box p, #weather-alerts p {
+#aqi-box p,
+#weather-alerts p {
     margin: 4px 0;
     font-size: 15px;
 }
@@ -395,21 +426,22 @@ footer {
 .weather-container,
 .section-card,
 .forecast-card {
-    background: rgba(0, 0, 0, 0.45); /* darker overlay */
+    background: rgba(0, 0, 0, 0.45);
+    /* darker overlay */
     color: #fff !important;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* better readability */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    /* better readability */
 }
+
 #temp-div h2,
 #weather-info p,
 #weather-tips {
     color: #fff !important;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
+
 .forecast-card {
     background: rgba(0, 0, 0, 0.4);
     color: #fff;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
-
-
-

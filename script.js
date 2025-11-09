@@ -1,3 +1,15 @@
+// ===== Logout (LocalStorage) =====
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('loggedUser');
+    // Optional: also clear local favorites/recent if you want per-user isolation
+    // localStorage.removeItem('favoriteCities');
+    // localStorage.removeItem('recentCities');
+    window.location.replace('login.html');
+  });
+}
+
 /************************************
  CONFIG — API KEY
 *************************************/
@@ -31,7 +43,7 @@ function fmtTime(utcSeconds, tzOffsetSeconds) {
 // Weekday short label using the city offset
 function weekdayShort(utcSeconds, tzOffsetSeconds) {
   const d = new Date((utcSeconds + tzOffsetSeconds) * 1000);
-  return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getUTCDay()];
+  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getUTCDay()];
 }
 
 /************************************
@@ -80,14 +92,14 @@ function showError(msg) {
  DISPLAY — Current Weather
 *************************************/
 function renderCurrentWeather(data, city) {
-  const tempEl  = document.getElementById("temp-div");
-  const infoEl  = document.getElementById("weather-info");
-  const tipsEl  = document.getElementById("weather-tips");
-  const iconEl  = document.getElementById("weather-icon");
+  const tempEl = document.getElementById("temp-div");
+  const infoEl = document.getElementById("weather-info");
+  const tipsEl = document.getElementById("weather-tips");
+  const iconEl = document.getElementById("weather-icon");
 
-  if (tempEl) tempEl.innerHTML  = "";
-  if (infoEl) infoEl.innerHTML  = "";
-  if (tipsEl) tipsEl.textContent  = "";
+  if (tempEl) tempEl.innerHTML = "";
+  if (infoEl) infoEl.innerHTML = "";
+  if (tipsEl) tipsEl.textContent = "";
   if (iconEl) iconEl.style.display = "none";
 
   // Safety checks
@@ -98,9 +110,9 @@ function renderCurrentWeather(data, city) {
 
   // Temperature (already metric)
   const temperature = Math.round(data.main.temp);
-  const feelsLike   = Math.round(data.main.feels_like);
+  const feelsLike = Math.round(data.main.feels_like);
   const weatherDesc = (data.weather[0].description || "").toLowerCase();
-  const iconCode    = data.weather[0].icon || "01d";
+  const iconCode = data.weather[0].icon || "01d";
 
   if (tempEl) tempEl.innerHTML = `<h2>${temperature}°C</h2>`;
   if (infoEl) infoEl.innerHTML = `<p>${weatherDesc}</p>`;
@@ -161,7 +173,7 @@ function renderCurrentWeather(data, city) {
   if (data.sys?.sunrise && data.sys?.sunset) {
     sunEl.innerHTML = `
       <p>Sunrise: ${fmtTime(data.sys.sunrise, tz)}</p>
-      <p>Sunset:  ${fmtTime(data.sys.sunset,  tz)}</p>
+      <p>Sunset:  ${fmtTime(data.sys.sunset, tz)}</p>
     `;
   } else {
     sunEl.innerHTML = "";
