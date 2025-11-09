@@ -125,6 +125,36 @@ body.dark footer {
     margin: 40px auto;
 }
 
+#extra-info p,
+#local-time p {
+    margin: 3px 0;
+    font-size: 15px;
+    opacity: 0.9;
+}
+
+/* AQI + Alerts */
+#aqi-box, #weather-alerts {
+    background: rgba(255,255,255,0.15);
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 10px;
+    text-align: center;
+    color: #fff;
+}
+
+#aqi-box p, #weather-alerts p {
+    margin: 4px 0;
+    font-size: 15px;
+}
+
+.sec-title {
+    color: #fff;
+    margin-top: 18px;
+    text-align: center;
+}
+
+
+
 h2 {
     color: #fff;
     margin-bottom: 20px;
