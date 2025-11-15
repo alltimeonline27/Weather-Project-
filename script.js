@@ -10,6 +10,16 @@ if (logoutBtn) {
   });
 }
 
+// Rating storage
+const RATING_DATA_KEY = "weatherAppRatingData";
+const USER_RATING_KEY = "weatherAppUserRating";
+
+document.addEventListener("DOMContentLoaded", () => {
+  initRating();
+});
+
+
+
 /************************************
  CONFIG — API KEY
 *************************************/
@@ -88,6 +98,76 @@ function showError(msg) {
   if (tipsEl) tipsEl.textContent = "Check the city name or your internet connection.";
 }
 
+// AQI
+function fetchAirQuality(lat, lon) {
+  const airURL = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_KEY}`;
+
+  fetch(airURL)
+    .then(res => res.json())
+    .then(data => {
+      if (!data || !data.list) return;
+
+      const aqi = data.list[0].main.aqi;
+      const comp = data.list[0].components;
+
+      const statusText = ["Good", "Fair", "Moderate", "Poor", "Very Poor"];
+
+      document.getElementById("aqi-value").textContent = aqi;
+      document.getElementById("aqi-status").textContent = statusText[aqi - 1];
+      document.getElementById("aqi-pm25").textContent = comp.pm2_5 + " µg/m³";
+      document.getElementById("aqi-pm10").textContent = comp.pm10 + " µg/m³";
+      document.getElementById("aqi-co").textContent = comp.co + " µg/m³";
+      document.getElementById("aqi-no2").textContent = comp.no2 + " µg/m³";
+      document.getElementById("aqi-so2").textContent = comp.so2 + " µg/m³";
+      document.getElementById("aqi-o3").textContent = comp.o3 + " µg/m³";
+
+      // Health warnings based on AQI
+      const healthBox = document.getElementById("aqi-health");
+      let warningText = "";
+      let color = "";
+
+      // AQI scale:
+      // 1 = Good
+      // 2 = Fair
+      // 3 = Moderate
+      // 4 = Poor
+      // 5 = Very Poor
+
+      switch (aqi) {
+        case 1:
+          warningText = "Air quality is good. No health risks!";
+          color = "#2ecc71"; // green
+          break;
+
+        case 2:
+          warningText = "Air quality is fair. Mild risk for very sensitive people.";
+          color = "#f1c40f"; // yellow
+          break;
+
+        case 3:
+          warningText = "Moderate air pollution. Children & elderly should reduce long outdoor activities.";
+          color = "#e67e22"; // orange
+          break;
+
+        case 4:
+          warningText = "Poor air quality! Wear a mask outside. Avoid going out for long.";
+          color = "#e74c3c"; // red
+          break;
+
+        case 5:
+          warningText = "Very unhealthy! Stay indoors. Avoid all outdoor exercise.";
+          color = "#8e44ad"; // purple
+          break;
+      }
+
+      healthBox.textContent = warningText;
+      healthBox.style.background = color;
+
+    })
+    .catch(err => console.error("AQI Error:", err));
+}
+
+
 /************************************
  DISPLAY — Current Weather
 *************************************/
@@ -121,6 +201,10 @@ function renderCurrentWeather(data, city) {
     iconEl.alt = "Weather icon";
     iconEl.style.display = "block";
   }
+  // Fetch and display AQI
+  // Fetch AQI
+  fetchAirQuality(data.coord.lat, data.coord.lon);
+
 
   // Extra weather info (create if missing)
   let extraEl = document.getElementById("extra-info");
@@ -136,6 +220,18 @@ function renderCurrentWeather(data, city) {
     <p>Wind: ${data.wind?.speed ?? 0} m/s</p>
     <p>Pressure: ${data.main.pressure} hPa</p>
   `;
+  // Format date & time
+  const updateTime = new Date(data.dt * 1000);
+  const options = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  };
+  document.getElementById("weather-updated").textContent =
+    "Updated at: " + updateTime.toLocaleString("en-US", options);
+
 
   // Tips
   if (tipsEl) {
@@ -420,4 +516,81 @@ function applyDynamicStyles(desc, iconCode) {
   else if (desc.includes("clear") && (iconCode || "").includes("n"))
     body.classList.add("clear-night");
   else body.classList.add("sunny");
+}
+
+// rating system
+function loadRatingData() {
+  const data = JSON.parse(localStorage.getItem(RATING_DATA_KEY)) || { total: 0, votes: 0 };
+  const userRating = parseInt(localStorage.getItem(USER_RATING_KEY)) || 0;
+  return { data, userRating };
+}
+function saveRatingData(data) {
+  localStorage.setItem(RATING_DATA_KEY, JSON.stringify(data));
+}
+function setUserRating(val) {
+  localStorage.setItem(USER_RATING_KEY, String(val));
+}
+
+function updateRatingUI(data, userRating) {
+  const avgEl = document.getElementById("rating-average");
+  const countEl = document.getElementById("rating-count");
+  const output = document.getElementById("rating-output");
+  const stars = document.querySelectorAll(".star");
+
+  const avg = data.votes === 0 ? 0 : (data.total / data.votes);
+  avgEl.textContent = data.votes === 0 ? "-" : avg.toFixed(1);
+  countEl.textContent = data.votes;
+
+  stars.forEach((s, i) => {
+    s.classList.remove("filled");
+    if (i < userRating) s.classList.add("filled");
+  });
+
+  output.textContent = userRating
+    ? `You rated ${userRating} ★`
+    : "Click a star to rate!";
+}
+
+
+function initRating() {
+  const stars = document.querySelectorAll(".star");
+  let { data, userRating } = loadRatingData();
+
+  updateRatingUI(data, userRating);
+
+  stars.forEach(star => {
+    const val = parseInt(star.dataset.value);
+
+    // Hover effect
+    star.addEventListener("mouseover", () => {
+      stars.forEach((s, i) => {
+        s.classList.toggle("preview", i < val);
+      });
+    });
+
+    star.addEventListener("mouseout", () => {
+      stars.forEach(s => s.classList.remove("preview"));
+    });
+    // Click rating with animation
+    star.addEventListener("click", () => {
+      // Animation: pop + sparkle
+      star.classList.add("pop", "sparkle");
+      setTimeout(() => {
+        star.classList.remove("pop", "sparkle");
+      }, 500);
+
+      if (userRating === 0) {
+        data.total += val;
+        data.votes += 1;
+      } else {
+        data.total = data.total - userRating + val;
+      }
+
+      userRating = val;
+      saveRatingData(data);
+      setUserRating(val);
+
+      updateRatingUI(data, userRating);
+    });
+  });
 }

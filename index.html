@@ -81,12 +81,35 @@
             <!-- Weather Display -->
             <div id="weather-display">
                 <div id="local-time"></div>
+                <p id="weather-updated" style="color:#fff; font-size:14px; margin-top:5px;">Updated at: -</p>
                 <img id="weather-icon" src="" alt="Weather icon" style="display:none;">
                 <div id="temp-div"></div>
                 <div id="weather-info"></div>
                 <div id="extra-info"></div>
                 <div id="sun-times"></div>
                 <div id="weather-tips"></div>
+                <!-- AIR QUALITY SECTION -->
+                <div id="air-quality" class="section-card" style="margin-top:20px;">
+                    <h3>Air Quality Index</h3>
+                    <p><strong>AQI:</strong> <span id="aqi-value">-</span></p>
+                    <p><strong>Status:</strong> <span id="aqi-status">-</span></p>
+                    <p><strong>PM2.5:</strong> <span id="aqi-pm25">-</span></p>
+                    <p><strong>PM10:</strong> <span id="aqi-pm10">-</span></p>
+                    <p><strong>CO:</strong> <span id="aqi-co">-</span></p>
+                    <p><strong>NO₂:</strong> <span id="aqi-no2">-</span></p>
+                    <p><strong>SO₂:</strong> <span id="aqi-so2">-</span></p>
+                    <p><strong>O₃:</strong> <span id="aqi-o3">-</span></p>
+                </div>
+                <p><strong>Health Warning:</strong></p>
+                <div id="aqi-health" style="
+    padding:10px; 
+    border-radius:8px; 
+    color:#fff; 
+    font-weight:bold;
+    margin-top:5px;">
+                    -
+                </div>
+
             </div>
 
             <h3 style="color:#fff; margin-top:20px;">Next Forecast</h3>
@@ -116,18 +139,21 @@
     <section id="rating-section">
         <div class="section-card">
             <h3>Rate This App</h3>
-            <div class="stars">
-                <span class="star" data-value="1">★</span>
-                <span class="star" data-value="2">★</span>
-                <span class="star" data-value="3">★</span>
-                <span class="star" data-value="4">★</span>
-                <span class="star" data-value="5">★</span>
+
+            <div class="stars" role="radiogroup" aria-label="Rating">
+                <span class="star" data-value="1" role="radio" aria-checked="false" tabindex="0">★</span>
+                <span class="star" data-value="2" role="radio" aria-checked="false" tabindex="0">★</span>
+                <span class="star" data-value="3" role="radio" aria-checked="false" tabindex="0">★</span>
+                <span class="star" data-value="4" role="radio" aria-checked="false" tabindex="0">★</span>
+                <span class="star" data-value="5" role="radio" aria-checked="false" tabindex="0">★</span>
             </div>
+
             <p id="rating-output" class="muted">Click a star to rate!</p>
             <p class="muted">Average: <span id="rating-average">-</span> / 5 • Votes: <span id="rating-count">0</span>
             </p>
         </div>
     </section>
+
 
     <!-- About Section -->
     <section id="about-section">
